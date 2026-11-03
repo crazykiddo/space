@@ -6,13 +6,16 @@ A simple script to get a quick overview of space available on all your local and
 - ssh
 
 ## Install/setup
-
+1. Install python (min. 3.14)
+2. Prepare external PCs if needed
+3. Adjust space.json with correct information
+4. Profit!
 
 
 ### Windows 10/11 client
-After reinstalling Windows, ASUS 1 needs its SSH server enabled again. Your script connects to the hostname asus on port 22 as crazy; hosttype does not change how it connects.
+After reinstalling Windows, PC2 needs its SSH server enabled again. Your script connects to the hostname PC2 on port 22 as HOSTUSER; hosttype does not change how it connects.
 
-On ASUS 1, open PowerShell as Administrator and install/start OpenSSH Server:
+On PC2, open PowerShell as Administrator and install/start OpenSSH Server:
 
 ```
 Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
@@ -30,16 +33,16 @@ if ($rule) {
     New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH SSH Server' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
 }
 ```
-Check that crazy is still a Windows account on ASUS 1 and use its account password, not a Windows Hello PIN. Reinstalling may have changed the account name or password, so update those values in the ASUS 1 entry if needed.
+Check that PC1 is still a Windows account on PC2 and use its account password, not a Windows Hello PIN. Reinstalling may have changed the account name or password, so update those values in the PC2 entry if needed.
 
 From the computer running this script, test the connection:
 ```
-Test-NetConnection asus -Port 22
-ssh crazy@asus
+Test-NetConnection PC2 -Port 22
+ssh PC2USER@PC2
 ```
 
 
-If asus does not resolve, use ASUS 1’s IP address for the test and update "hostname" in the script, or configure name resolution so asus points to it. I’d also change "port": "22" to "port": 22 to match Paramiko’s expected integer.
+If PC2 does not resolve, use PC2's IP address for the test and update "hostname" in the script, or configure name resolution so PC2 points to it.
 
 One separate possibility: after SSH connects, the script relies on wmic to read Windows disk space. If that command is unavailable on the reinstalled system, SSH can work while disk reporting fails.
 
@@ -47,7 +50,7 @@ The file includes plaintext passwords. Treat them as exposed and change them, es
 
 ### SSH on client/host
 
-If ASUS 1 was reinstalled, its SSH host key was likely regenerated. First, verify the new fingerprint directly on ASUS 1 in PowerShell:
+If PC2 was reinstalled, its SSH host key was likely regenerated. First, verify the new fingerprint directly on PC2 in PowerShell:
 
 ```
 ssh-keygen -lf C:\ProgramData\ssh\ssh_host_ed25519_key.pub
@@ -56,8 +59,8 @@ ssh-keygen -lf C:\ProgramData\ssh\ssh_host_ed25519_key.pub
 Confirm it matches SHA256:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX. If it does, on the computer where you run SSH, remove the old entry and reconnect:
 
 ```
-ssh-keygen -R asus
-ssh crazy@asus
+ssh-keygen -R PC2
+ssh PC2USER@PC2
 ```
 
 Accept the new key only if the fingerprint shown on reconnect matches the one you verified. ssh-keygen -R updates the relevant entry in known_hosts; you don’t need to edit line 8 manually.
