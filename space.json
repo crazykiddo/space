@@ -1,0 +1,29 @@
+[
+    {
+        "hosttitle": "Windows PC",
+        "hosttype": "local",
+        "hostname": "hostname",
+        "username": "username",
+        "password": "password",
+        "port": 22
+    },    
+    {
+        "hosttitle": "Old NAS Server",
+        "hosttype": "local",
+        "hostname": "oldnasserver",
+        "username": "admin",
+        "password": "adminpassword",
+        "port": 22,
+        "mainvol": "/volume1",
+        "legacy_ssh_rsa": "True"
+    },
+    {
+        "hosttitle": "External VPS",
+        "hosttype": "remote",
+        "hostname": "hosturl.com",
+        "username": "hostusername",
+        "key_filename": "URL TO SSH KEY (C:\\mykeys\\privatekey)",
+        "port": 22,
+        "mainvol": "/:"
+    }
+]
